@@ -146,12 +146,12 @@ public class CameraRollModule extends ReactContextBaseJavaModule {
         // Media is not saved into an album when using Environment.DIRECTORY_DCIM.
         if (isAlbumPresent) {
           if ("video".equals(mOptions.getString("type"))) {
-            environment = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES);
+            environment = mContext.getExternalFilesDir(Environment.DIRECTORY_MOVIES);
           } else {
-            environment = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+            environment = mContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
           }
         } else {
-          environment = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
+          environment = mContext.getExternalFilesDir(Environment.DIRECTORY_DCIM);
         }
 
         File exportDir;
@@ -198,6 +198,8 @@ public class CameraRollModule extends ReactContextBaseJavaModule {
               public void onScanCompleted(String path, Uri uri) {
                 if (uri != null) {
                   mPromise.resolve(uri.toString());
+                } else if (path != null) {
+                    mPromise.resolve(path);
                 } else {
                   mPromise.reject(ERROR_UNABLE_TO_SAVE, "Could not add image to gallery");
                 }
